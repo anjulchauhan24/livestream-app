@@ -7,6 +7,18 @@ A professional full-stack web application for streaming RTSP video feeds with dy
 ![Python](https://img.shields.io/badge/python-3.8+-yellow.svg)
 ![React](https://img.shields.io/badge/react-19.2.0-61dafb.svg)
 
+## 🚀 About This Project
+
+This RTSP Live Studio was developed as part of a full-stack development assignment, demonstrating proficiency in:
+- Modern React architecture with hooks
+- RESTful API design and implementation
+- MongoDB database integration
+- Real-time video streaming capabilities
+- Dynamic overlay management system
+- Responsive UI/UX design
+
+**Developer**: Anjul Chauhan, Computer Science Engineering Student at Chandigarh University, with expertise in full-stack development, AI/ML implementation, and cloud deployment. View more projects at [anjulportfolio.netlify.app](https://anjulportfolio.netlify.app/)
+
 ## 📋 Table of Contents
 
 - [Features](#features)
@@ -94,7 +106,7 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/rtsp-livestream-app.git
+git clone https://github.com/anjulchauhan24/rtsp-livestream-app.git
 cd rtsp-livestream-app
 ```
 
@@ -515,9 +527,16 @@ Contributions are welcome! Please follow these steps:
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👥 Authors
+## 👥 Author
 
-- **Your Name** - *Initial work* - [YourGitHub](https://github.com/yourusername)
+**Anjul Chauhan**
+- 🎓 B.E. Computer Science & Engineering - Chandigarh University
+- 💼 Full Stack Developer
+- 🌐 Portfolio: [anjulportfolio.netlify.app](https://anjulportfolio.netlify.app/)
+- 📧 Email: anjulchauhan24@gmail.com
+- 💻 GitHub: [@anjulchauhan24](https://github.com/anjulchauhan24)
+- 🔗 LinkedIn: [linkedin.com/in/anjulchauhan24](https://linkedin.com/in/anjulchauhan24)
+- 📱 Phone: +91 7017575679
 
 ## 🙏 Acknowledgments
 
@@ -525,14 +544,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - Flask community for excellent documentation
 - MongoDB for cloud database solution
 - Lucide for beautiful icons
+- OpenAI for inspiration in API design
 
 ## 📞 Support
 
 For support and questions:
 
-- 📧 Email: support@example.com
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/rtsp-livestream-app/issues)
-- 📖 Documentation: [Wiki](https://github.com/yourusername/rtsp-livestream-app/wiki)
+- 🌐 Portfolio: [anjulportfolio.netlify.app](https://anjulportfolio.netlify.app/)
+- 📧 Email: anjulchauhan24@gmail.com
+- 🐛 Issues: [GitHub Issues](https://github.com/anjulchauhan24/rtsp-livestream-app/issues)
+- 💼 LinkedIn: [Connect with me](https://linkedin.com/in/anjulchauhan24)
 
 ## 🗺️ Roadmap
 
