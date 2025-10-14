@@ -1,0 +1,538 @@
+# API Documentation - RTSP Livestream Application
+
+## Base URL
+```
+http://localhost:5000/api
+```
+
+## Table of Contents
+1. [Health Check](#health-check)
+2. [Overlay Management](#overlay-management)
+3. [RTSP Settings](#rtsp-settings)
+4. [Error Handling](#error-handling)
+5. [Example Requests](#example-requests)
+
+---
+
+## Health Check
+
+### Check API Status
+Verify that the API and database connection are working.
+
+**Endpoint:** `GET /health`
+
+**Response:**
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "message": "API is running"
+}
+```
+
+**Status Codes:**
+- `200 OK` - API is healthy and database is connected
+
+---
+
+## Overlay Management
+
+### 1. Create Overlay
+
+Create a new overlay (text or image) to display on the video stream.
+
+**Endpoint:** `POST /overlays`
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "type": "text",
+  "content": "Live Stream",
+  "name": "Channel Logo",
+  "position": {
+    "x": 50,
+    "y": 50
+  },
+  "size": {
+    "width": 200,
+    "height": 50
+  },
+  "style": {
+    "fontSize": 24,
+    "color": "#ffffff",
+    "backgroundColor": "rgba(0,0,0,0.7)",
+    "padding": "12px",
+    "borderRadius": "8px",
+    "fontWeight": "bold"
+  },
+  "isVisible": true
+}
+```
+
+**Field Descriptions:**
+- `type` (required): Either "text" or "logo"
+- `content` (required): Text string for text overlays, or image URL for logo overlays
+- `name` (optional): Display name for the overlay
+- `position` (required): X and Y coordinates in pixels
+- `size` (required): Width and height in pixels
+- `style` (optional): CSS styling properties (primarily for text overlays)
+- `isVisible` (optional): Boolean to show/hide overlay (default: true)
+
+**Response:**
+```json
+{
+  "message": "Overlay created successfully",
+  "overlay": {
+    "_id": "60d5ec49f1b2c8b5e8c8d5a1",
+    "type": "text",
+    "content": "Live Stream",
+    "name": "Channel Logo",
+    "position": { "x": 50, "y": 50 },
+    "size": { "width": 200, "height": 50 },
+    "style": { 
+      "fontSize": 24,
+      "color": "#ffffff",
+      "backgroundColor": "rgba(0,0,0,0.7)",
+      "padding": "12px",
+      "borderRadius": "8px",
+      "fontWeight": "bold"
+    },
+    "isVisible": true
+  }
+}
+```
+
+**Status Codes:**
+- `201 Created` - Overlay created successfully
+- `400 Bad Request` - Missing required fields
+- `500 Internal Server Error` - Server error
+
+---
+
+### 2. Get All Overlays
+
+Retrieve all saved overlays from the database.
+
+**Endpoint:** `GET /overlays`
+
+**Response:**
+```json
+{
+  "overlays": [
+    {
+      "_id": "60d5ec49f1b2c8b5e8c8d5a1",
+      "type": "text",
+      "content": "Live Stream",
+      "name": "Channel Logo",
+      "position": { "x": 50, "y": 50 },
+      "size": { "width": 200, "height": 50 },
+      "style": { "fontSize": 24, "color": "#ffffff" },
+      "isVisible": true
+    },
+    {
+      "_id": "60d5ec49f1b2c8b5e8c8d5a2",
+      "type": "logo",
+      "content": "https://example.com/logo.png",
+      "name": "Company Logo",
+      "position": { "x": 100, "y": 100 },
+      "size": { "width": 150, "height": 150 },
+      "isVisible": true
+    }
+  ]
+}
+```
+
+**Status Codes:**
+- `200 OK` - Overlays retrieved successfully
+- `500 Internal Server Error` - Server error
+
+---
+
+### 3. Get Single Overlay
+
+Retrieve a specific overlay by its ID.
+
+**Endpoint:** `GET /overlays/:overlay_id`
+
+**URL Parameters:**
+- `overlay_id` - MongoDB ObjectId of the overlay
+
+**Response:**
+```json
+{
+  "overlay": {
+    "_id": "60d5ec49f1b2c8b5e8c8d5a1",
+    "type": "text",
+    "content": "Live Stream",
+    "position": { "x": 50, "y": 50 },
+    "size": { "width": 200, "height": 50 },
+    "style": { "fontSize": 24 },
+    "isVisible": true
+  }
+}
+```
+
+**Status Codes:**
+- `200 OK` - Overlay found
+- `400 Bad Request` - Invalid overlay ID format
+- `404 Not Found` - Overlay doesn't exist
+- `500 Internal Server Error` - Server error
+
+---
+
+### 4. Update Overlay
+
+Update an existing overlay's properties.
+
+**Endpoint:** `PUT /overlays/:overlay_id`
+
+**URL Parameters:**
+- `overlay_id` - MongoDB ObjectId of the overlay
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Request Body:** (all fields optional, only include what you want to update)
+```json
+{
+  "content": "Updated Text",
+  "position": {
+    "x": 100,
+    "y": 150
+  },
+  "size": {
+    "width": 250,
+    "height": 60
+  },
+  "isVisible": false,
+  "style": {
+    "color": "#ff0000",
+    "fontSize": 30
+  }
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Overlay updated successfully",
+  "overlay": {
+    "_id": "60d5ec49f1b2c8b5e8c8d5a1",
+    "type": "text",
+    "content": "Updated Text",
+    "position": { "x": 100, "y": 150 },
+    "size": { "width": 250, "height": 60 },
+    "style": { "color": "#ff0000", "fontSize": 30 },
+    "isVisible": false
+  }
+}
+```
+
+**Status Codes:**
+- `200 OK` - Overlay updated successfully
+- `400 Bad Request` - Invalid overlay ID format
+- `404 Not Found` - Overlay doesn't exist
+- `500 Internal Server Error` - Server error
+
+---
+
+### 5. Delete Overlay
+
+Delete an overlay from the database.
+
+**Endpoint:** `DELETE /overlays/:overlay_id`
+
+**URL Parameters:**
+- `overlay_id` - MongoDB ObjectId of the overlay
+
+**Response:**
+```json
+{
+  "message": "Overlay deleted successfully"
+}
+```
+
+**Status Codes:**
+- `200 OK` - Overlay deleted successfully
+- `400 Bad Request` - Invalid overlay ID format
+- `404 Not Found` - Overlay doesn't exist
+- `500 Internal Server Error` - Server error
+
+---
+
+## RTSP Settings
+
+### 1. Get RTSP Settings
+
+Retrieve the currently saved RTSP URL.
+
+**Endpoint:** `GET /settings/rtsp`
+
+**Response:**
+```json
+{
+  "settings": {
+    "_id": "60d5ec49f1b2c8b5e8c8d5a3",
+    "type": "rtsp",
+    "rtspUrl": "rtsp://example.com:8554/stream"
+  }
+}
+```
+
+**Response (no settings saved):**
+```json
+{
+  "settings": null
+}
+```
+
+**Status Codes:**
+- `200 OK` - Settings retrieved (may be null)
+- `500 Internal Server Error` - Server error
+
+---
+
+### 2. Save RTSP Settings
+
+Save or update the RTSP stream URL.
+
+**Endpoint:** `POST /settings/rtsp`
+
+**Headers:**
+```
+Content-Type: application/json
+```
+
+**Request Body:**
+```json
+{
+  "rtspUrl": "rtsp://example.com:8554/stream"
+}
+```
+
+**Supported URL formats:**
+- RTSP: `rtsp://example.com:8554/stream`
+- HTTP/HTTPS video: `https://example.com/video.mp4`
+- HLS: `https://example.com/stream.m3u8`
+
+**Response:**
+```json
+{
+  "message": "RTSP settings saved successfully",
+  "settings": {
+    "type": "rtsp",
+    "rtspUrl": "rtsp://example.com:8554/stream"
+  }
+}
+```
+
+**Status Codes:**
+- `200 OK` - Settings saved successfully
+- `400 Bad Request` - Missing rtspUrl field
+- `500 Internal Server Error` - Server error
+
+---
+
+## Error Handling
+
+All error responses follow this format:
+
+```json
+{
+  "error": "Error message describing what went wrong"
+}
+```
+
+### Common Error Codes
+
+| Status Code | Description |
+|------------|-------------|
+| 400 | Bad Request - Invalid input or missing required fields |
+| 404 | Not Found - Requested resource doesn't exist |
+| 500 | Internal Server Error - Server-side error occurred |
+
+---
+
+## Example Requests
+
+### Using cURL
+
+**Create a text overlay:**
+```bash
+curl -X POST http://localhost:5000/api/overlays \
+  -H "Content-Type: application/json" \
+  -d '{
+    "type": "text",
+    "content": "LIVE NOW",
+    "position": {"x": 20, "y": 20},
+    "size": {"width": 150, "height": 40},
+    "style": {
+      "fontSize": 20,
+      "color": "#ff0000",
+      "backgroundColor": "rgba(0,0,0,0.8)"
+    }
+  }'
+```
+
+**Get all overlays:**
+```bash
+curl http://localhost:5000/api/overlays
+```
+
+**Update an overlay:**
+```bash
+curl -X PUT http://localhost:5000/api/overlays/60d5ec49f1b2c8b5e8c8d5a1 \
+  -H "Content-Type: application/json" \
+  -d '{"isVisible": false}'
+```
+
+**Delete an overlay:**
+```bash
+curl -X DELETE http://localhost:5000/api/overlays/60d5ec49f1b2c8b5e8c8d5a1
+```
+
+**Save RTSP URL:**
+```bash
+curl -X POST http://localhost:5000/api/settings/rtsp \
+  -H "Content-Type: application/json" \
+  -d '{"rtspUrl": "rtsp://example.com:8554/stream"}'
+```
+
+### Using JavaScript (Axios)
+
+```javascript
+import axios from 'axios';
+
+const API_URL = 'http://localhost:5000/api';
+
+// Create overlay
+const createOverlay = async () => {
+  const response = await axios.post(`${API_URL}/overlays`, {
+    type: 'text',
+    content: 'Subscribe Now!',
+    position: { x: 100, y: 100 },
+    size: { width: 200, height: 50 }
+  });
+  return response.data;
+};
+
+// Get all overlays
+const getOverlays = async () => {
+  const response = await axios.get(`${API_URL}/overlays`);
+  return response.data.overlays;
+};
+
+// Update overlay
+const updateOverlay = async (id, updates) => {
+  const response = await axios.put(`${API_URL}/overlays/${id}`, updates);
+  return response.data;
+};
+
+// Delete overlay
+const deleteOverlay = async (id) => {
+  const response = await axios.delete(`${API_URL}/overlays/${id}`);
+  return response.data;
+};
+```
+
+### Using Python (Requests)
+
+```python
+import requests
+
+API_URL = 'http://localhost:5000/api'
+
+# Create overlay
+def create_overlay():
+    data = {
+        'type': 'text',
+        'content': 'Live Stream',
+        'position': {'x': 50, 'y': 50},
+        'size': {'width': 200, 'height': 50}
+    }
+    response = requests.post(f'{API_URL}/overlays', json=data)
+    return response.json()
+
+# Get all overlays
+def get_overlays():
+    response = requests.get(f'{API_URL}/overlays')
+    return response.json()['overlays']
+
+# Update overlay
+def update_overlay(overlay_id, updates):
+    response = requests.put(f'{API_URL}/overlays/{overlay_id}', json=updates)
+    return response.json()
+
+# Delete overlay
+def delete_overlay(overlay_id):
+    response = requests.delete(f'{API_URL}/overlays/{overlay_id}')
+    return response.json()
+```
+
+---
+
+## Database Schema
+
+### Overlay Document
+```javascript
+{
+  _id: ObjectId,
+  type: String,           // 'text' or 'logo'
+  content: String,        // Text content or image URL
+  name: String,           // Optional display name
+  position: {
+    x: Number,
+    y: Number
+  },
+  size: {
+    width: Number,
+    height: Number
+  },
+  style: Object,          // CSS styling properties
+  isVisible: Boolean      // Show/hide overlay
+}
+```
+
+### Settings Document
+```javascript
+{
+  _id: ObjectId,
+  type: String,           // 'rtsp'
+  rtspUrl: String         // Stream URL
+}
+```
+
+---
+
+## Rate Limiting & Best Practices
+
+1. **Request Frequency**: No built-in rate limiting, but avoid excessive requests
+2. **Error Handling**: Always handle potential errors in your client code
+3. **Validation**: Validate data on client-side before sending to API
+4. **Connection**: Ensure MongoDB connection is active before making requests
+5. **CORS**: Backend has CORS enabled for all origins in development
+
+---
+
+## Testing the API
+
+You can test the API health with:
+```bash
+curl http://localhost:5000/api/health
+```
+
+Expected response when everything is working:
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "message": "API is running"
+}
+```
