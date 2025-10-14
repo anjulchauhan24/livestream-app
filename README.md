@@ -330,7 +330,7 @@ Content-Type: application/json
 GET /settings/rtsp
 ```
 
-For complete API documentation, see [API_DOCUMENTATION.md](API_DOCUMENTATION.md)
+For complete API documentation, see [API_DOCUMENTATION](API_DOCUMENTATION)
 
 ## 📁 Project Structure
 
@@ -356,9 +356,9 @@ rtsp-livestream-app/
 │   └── README.md
 │
 ├── docs/
-│   ├── API_DOCUMENTATION.md
-│   ├── USER_GUIDE.md
-│   └── SETUP_GUIDE.md
+│   ├── API_DOCUMENTATION
+│   ├── USER_GUIDE
+│   └── SETUP_GUIDE
 │
 └── README.md                 # This file
 ```
