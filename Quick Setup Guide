@@ -1,0 +1,416 @@
+# Quick Setup Guide - RTSP Livestream Application
+
+## 🚀 5-Minute Setup
+
+Follow these steps to get your livestream application running quickly.
+
+---
+
+## Prerequisites Checklist
+
+Before starting, ensure you have:
+
+- [ ] Node.js (v14+) installed → [Download](https://nodejs.org/)
+- [ ] Python (v3.8+) installed → [Download](https://python.org/)
+- [ ] MongoDB Atlas account → [Sign up free](https://www.mongodb.com/cloud/atlas)
+- [ ] Code editor (VS Code recommended)
+- [ ] Two terminal windows open
+
+---
+
+## Step 1: MongoDB Atlas Setup (3 minutes)
+
+### Create Your Database
+
+1. **Sign up/Login** to MongoDB Atlas
+2. **Create a new cluster**:
+   - Click "Build a Database"
+   - Choose "Free" (M0 Sandbox)
+   - Select your region
+   - Click "Create Cluster"
+
+3. **Create Database User**:
+   - Go to "Database Access"
+   - Click "Add New Database User"
+   - Username: `your_username`
+   - Password: `your_password` (save this!)
+   - User Privileges: "Read and write to any database"
+   - Click "Add User"
+
+4. **Whitelist Your IP**:
+   - Go to "Network Access"
+   - Click "Add IP Address"
+   - Click "Allow Access from Anywhere" (for development)
+   - Confirm
+
+5. **Get Connection String**:
+   - Go to "Database" → Click "Connect"
+   - Choose "Connect your application"
+   - Copy the connection string
+   - It looks like: `mongodb+srv://<username>:<password>@cluster0.xxxxx.mongodb.net/`
+
+---
+
+## Step 2: Backend Setup (1 minute)
+
+### Configure Environment
+
+1. **Navigate to backend folder**:
+   ```bash
+   cd backend
+   ```
+
+2. **Create `.env` file** (in backend folder):
+   ```env
+   MONGO_URI=mongodb+srv://your_username:your_password@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+   DATABASE_NAME=rtsp_livestream
+   PORT=5000
+   ```
+
+   **⚠️ Important**: Replace `your_username` and `your_password` with your actual credentials!
+
+   **Password Special Characters**: If your password contains special characters, URL-encode them:
+   - `@` → `%40`
+   - `#` → `%23`
+   - `$` → `%24`
+   - `%` → `%25`
+   - `&` → `%26`
+
+3. **Install dependencies**:
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Test connection**:
+   ```bash
+   python test_connection.py
+   ```
+
+   ✅ Expected output: "All tests passed!"
+
+---
+
+## Step 3: Frontend Setup (1 minute)
+
+1. **Open a new terminal** and navigate to frontend:
+   ```bash
+   cd frontend
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+---
+
+## Step 4: Launch Application (30 seconds)
+
+### Terminal 1 - Backend
+```bash
+cd backend
+python app.py
+```
+
+✅ You should see:
+```
+🚀 Starting Flask server on port 5000...
+📍 API will be available at: http://localhost:5000/api
+```
+
+### Terminal 2 - Frontend
+```bash
+cd frontend
+npm start
+```
+
+✅ Browser opens automatically at: `http://localhost:3000`
+
+---
+
+## Step 5: Test Your Setup (30 seconds)
+
+1. **Enter a test video URL**:
+   ```
+   https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
+   ```
+
+2. **Click "Launch Stream"**
+
+3. **Create your first overlay**:
+   - Click "Create New Overlay"
+   - Name: "Test Overlay"
+   - Type: Text Overlay
+   - Content: "LIVE NOW"
+   - Click "Save"
+
+4. **Drag the overlay** to reposition it on the video
+
+🎉 **Success!** Your application is now running!
+
+---
+
+## Quick Test Commands
+
+### Check if backend is running:
+```bash
+curl http://localhost:5000/api/health
+```
+
+Expected response:
+```json
+{
+  "status": "healthy",
+  "database": "connected",
+  "message": "API is running"
+}
+```
+
+### Check if frontend is accessible:
+Open browser: `http://localhost:3000`
+
+---
+
+## Common Setup Issues & Solutions
+
+### Issue 1: "MongoDB connection failed"
+**Solution**: 
+- Check `.env` file has correct credentials
+- Verify password is URL-encoded
+- Ensure IP is whitelisted in MongoDB Atlas
+
+### Issue 2: "Port 5000 already in use"
+**Solution**:
+```bash
+# Find and kill process on port 5000
+# On Windows:
+netstat -ano | findstr :5000
+taskkill /PID <process_id> /F
+
+# On Mac/Linux:
+lsof -ti:5000 | xargs kill -9
+```
+
+### Issue 3: "Module not found" errors
+**Solution**:
+```bash
+# Backend
+cd backend
+pip install -r requirements.txt
+
+# Frontend
+cd frontend
+rm -rf node_modules package-lock.json
+npm install
+```
+
+### Issue 4: Frontend won't start
+**Solution**:
+```bash
+cd frontend
+npm cache clean --force
+npm install
+npm start
+```
+
+---
+
+## Directory Structure
+
+```
+rtsp-livestream-app/
+│
+├── backend/
+│   ├── app.py                 # Flask API server
+│   ├── requirements.txt       # Python dependencies
+│   ├── .env                   # Environment variables (create this!)
+│   └── test_connection.py     # Database test script
+│
+└── frontend/
+    ├── src/
+    │   ├── App.js            # Main React component
+    │   ├── components/       # React components
+    │   └── services/         # API service
+    ├── public/
+    ├── package.json          # Node dependencies
+    └── README.md
+```
+
+---
+
+## Next Steps
+
+After successful setup:
+
+1. **Explore Features**:
+   - Create multiple overlays
+   - Try different text styles
+   - Add image overlays
+
+2. **Configure Real RTSP Stream**:
+   - Set up RTSP server
+   - Use IP camera URL
+   - Configure OBS Studio
+
+3. **Customize**:
+   - Modify overlay styles
+   - Adjust positions
+   - Create presets
+
+4. **Read Full Documentation**:
+   - User Documentation for detailed features
+   - API Documentation for integration
+
+---
+
+## Useful URLs
+
+| Service | URL |
+|---------|-----|
+| Frontend | http://localhost:3000 |
+| Backend API | http://localhost:5000/api |
+| Health Check | http://localhost:5000/api/health |
+| MongoDB Atlas | https://cloud.mongodb.com |
+
+---
+
+## Default Credentials & Settings
+
+| Setting | Value |
+|---------|-------|
+| Backend Port | 5000 |
+| Frontend Port | 3000 |
+| Database Name | rtsp_livestream |
+| API Base URL | http://localhost:5000/api |
+
+---
+
+## Support
+
+If you encounter issues:
+
+1. Check terminal outputs for error messages
+2. Review the troubleshooting section above
+3. Verify all prerequisites are installed
+4. Ensure MongoDB Atlas is properly configured
+5. Check firewall/antivirus settings
+
+---
+
+## Production Deployment
+
+For production deployment:
+
+### Backend (Heroku example):
+```bash
+# Install Heroku CLI
+heroku create your-app-name
+heroku config:set MONGO_URI="your_connection_string"
+git push heroku main
+```
+
+### Frontend (Netlify/Vercel):
+```bash
+# Update API_BASE_URL in App.js to your backend URL
+npm run build
+# Deploy 'build' folder to Netlify or Vercel
+```
+
+---
+
+## Environment Variables Reference
+
+### `.env` File (Backend)
+```env
+# MongoDB Connection
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/
+
+# Database Configuration
+DATABASE_NAME=rtsp_livestream
+
+# Server Configuration
+PORT=5000
+
+# Optional: Flask Configuration
+FLASK_ENV=development
+FLASK_DEBUG=True
+```
+
+---
+
+## Testing Checklist
+
+After setup, verify:
+
+- [ ] Backend starts without errors
+- [ ] Frontend loads in browser
+- [ ] Health check returns "healthy"
+- [ ] Can create overlays
+- [ ] Video player loads
+- [ ] Overlays appear on video
+- [ ] Can drag overlays
+- [ ] Can delete overlays
+- [ ] Saved overlays persist after refresh
+
+---
+
+## Performance Tips
+
+1. **Keep Active Overlays Minimal**: Limit to 5-10 for best performance
+2. **Optimize Images**: Use compressed images under 1MB
+3. **Close Unused Apps**: Free up system resources
+4. **Use Chrome**: Best browser compatibility
+5. **Stable Internet**: Required for streaming
+
+---
+
+## Security Notes
+
+⚠️ **Development Only**: Current setup is for development
+
+For production:
+- Use environment variables for sensitive data
+- Never commit `.env` files to git
+- Enable CORS restrictions
+- Use HTTPS for all connections
+- Implement authentication
+- Whitelist specific IPs in MongoDB
+- Use strong passwords
+
+---
+
+## Getting Help
+
+**Documentation**:
+- User Documentation: Complete feature guide
+- API Documentation: Technical reference
+
+**Quick Commands**:
+```bash
+# Restart backend
+cd backend && python app.py
+
+# Restart frontend
+cd frontend && npm start
+
+# Test database
+cd backend && python test_connection.py
+
+# Clear frontend cache
+cd frontend && npm cache clean --force
+```
+
+---
+
+## Version Information
+
+- **Application Version**: 1.0.0
+- **Node.js**: v14.0+ required
+- **Python**: v3.8+ required
+- **React**: v19.2.0
+- **Flask**: v3.0.0
+- **MongoDB**: Atlas (Cloud)
+
+---
+
+*Setup complete! Enjoy your RTSP Livestream Application! 🎉*
